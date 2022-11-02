@@ -11,6 +11,18 @@ router.get('', async (req, res) => {
     }
 })
 
+//order is very important for the next 2 APIs
+router.get('/find', async (req, res) => {
+    const search_param = req.query.search;
+    try {
+        const search_key = { $regex: search_param, $options: 'i' };
+        const users = await User.find({ $or: [{ name: search_key }, { email: search_key }] });
+        return res.json(users);
+    } catch (err) {
+        return res.status(500).json({ msg: err });
+    }
+})
+
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
     try {
@@ -20,6 +32,7 @@ router.get('/:id', async (req, res) => {
         return res.status(500).json({ msg: `Failed to find user with _id = ${id}` });
     }
 })
+
 
 router.post('', async (req, res) => {
     const body = req.body;
