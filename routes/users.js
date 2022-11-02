@@ -36,7 +36,6 @@ router.put('', async (req, res) => {
     const { _id, ...rest } = req.body;
     try {
         const updateUser = await User.updateOne({ _id: _id }, rest);
-        console.log(updateUser);
         if (updateUser.matchedCount === 1) {
             return res.json({ msg: `User Updated Successfully` });
         }
